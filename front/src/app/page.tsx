@@ -2,8 +2,10 @@
 
 import { DataTable } from "@/components/datatable";
 import { DummyForm } from "@/components/dummyform";
-import { listDummies, DummyModel, createDummy } from "@/lib/api/dummyGateway";
+import { listDummies, DummyModel, createDummy, deleteDummy } from "@/lib/api/dummyGateway";
+import { on } from "events";
 import { useEffect, useState } from "react";
+import { set } from "react-hook-form";
 
 export default function DemoPage() {
   const [data, setData] = useState<DummyModel[]>([]);
@@ -31,6 +33,14 @@ export default function DemoPage() {
     // # update dummies
     setData(await listDummies())
   }
+  const onRowClicked = (data: object) => {
+    console.log(data)
+  } 
+  const onDeleteClicked = async (data: DummyModel) => {
+    await deleteDummy(data.id as string)
+    setData(await listDummies())
+    console.log(data)
+  }
 
   return (
     <div className="container mx-auto">
@@ -42,7 +52,10 @@ export default function DemoPage() {
 
       <div>
         {data && columns &&
-          <DataTable columns={columns} data={data} />
+          <DataTable 
+          onDeleteClicked={(data) => onDeleteClicked(data as DummyModel)}
+          onRowClicked={(data) => onRowClicked(data)}
+          columns={columns} data={data} />
         }
       </div>
     </div>

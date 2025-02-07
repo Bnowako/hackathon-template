@@ -16,16 +16,31 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import {
+  Button,
+} from "@/components/ui/button"
+import { MoreHorizontal } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  onDeleteClicked: (data: object) => void
+  onRowClicked: (data: object) => void
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  onDeleteClicked,
+  onRowClicked,
 }: DataTableProps<TData, TValue>) {
-  console.log("!!columns!!", columns, data)
+  
   const table = useReactTable({
     data,
     columns,
@@ -56,7 +71,7 @@ export function DataTable<TData, TValue>({
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow
+                <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
               >
@@ -66,6 +81,23 @@ export function DataTable<TData, TValue>({
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
+                <TableCell>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => onRowClicked(row.original as object)}>
+                        Trigger
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => onDeleteClicked(row.original as object)}>
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
               </TableRow>
             ))
           ) : (
