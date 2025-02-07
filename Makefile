@@ -9,7 +9,3 @@ run-backend:
 
 run-frontend:
 	cd front && bun run dev
-
-start:
-	osascript -e 'tell application "Terminal" to do script "cd $(shell pwd)/back && make run"'
-	osascript -e 'tell application "Terminal" to do script "cd $(shell pwd)/front && bun run dev"'
