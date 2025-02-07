@@ -52,7 +52,7 @@ export function DummyForm({ onSubmit }: DummyFormProps) {
                         <FormItem>
                             <FormLabel>Name</FormLabel>
                             <FormControl>
-                                <Input placeholder="shadcn" {...field} />
+                                <Input placeholder="name" {...field} />
                             </FormControl>
                             <FormDescription>
                                 This is your public display name.
