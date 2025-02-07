@@ -1,39 +1,51 @@
 "use client"
 
-import { DummyCard } from "@/components/dummycard";
+import { DataTable } from "@/components/datatable";
 import { DummyForm } from "@/components/dummyform";
-import { createDummy, DummyModel, listDummies } from "@/lib/api/dummyGateway";
+import { listDummies, DummyModel, createDummy } from "@/lib/api/dummyGateway";
 import { useEffect, useState } from "react";
 
-export default  function Home() {
+export default function DemoPage() {
+  const [data, setData] = useState<DummyModel[]>([]);
+  const [columns, setColumns] = useState<{ header: string, accessorKey: string }[]>([]);
 
-  
-  const [dummies, setdummy] = useState<DummyModel[]>([])
-
+  function getColumnsFromData(data: DummyModel[]): { header: string; accessorKey: string }[] {
+    if (!data.length) return [];
+    return Object.keys(data[0]).map((key) => ({
+      header: key.charAt(0).toUpperCase() + key.slice(1),
+      accessorKey: key, // Use accessorKey here
+    }));
+  }
   useEffect(() => {
     (async () => {
-      setdummy(await listDummies())
-    })()
-  })
+      const dummyData = await listDummies();
+      setData(dummyData);
+      console.log(getColumnsFromData(dummyData));
+      setColumns(getColumnsFromData(dummyData));
+    })();
+  }, []);
+
 
   const onSubmit = async (values: any) => {
     await createDummy(values.name)
     // # update dummies
-    setdummy(await listDummies())
+    setData(await listDummies())
   }
 
   return (
-    <div>
-      <div className="grid grid-cols-1 gap-2 max-w-[50%] mx-auto">
-        <div className="grid grid-cols-2 my-5">
-          <div></div>
-          <DummyForm  onSubmit={onSubmit}/>
+    <div className="container mx-auto">
 
-        </div>
-        {dummies.map((dummy: DummyModel) => (
-          <DummyCard key={dummy.id} request={dummy} />
-        ))}
+      <div className="grid grid-cols-2 my-5">
+        <div></div>
+        <DummyForm onSubmit={onSubmit} />
+      </div>
+
+      <div>
+        {data && columns &&
+          <DataTable columns={columns} data={data} />
+        }
       </div>
     </div>
-  )
+
+  );
 }

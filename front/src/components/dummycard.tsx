@@ -2,16 +2,19 @@ import { GentleAgent } from "@/api/agentApi";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { JSX } from "react";
+import { Button } from "./ui/button";
 
-export const DummyCard = ({ request, children }: { request: GentleAgent, children?: JSX.Element }) => {
-    const { id, name, time } = request
+interface DummyCardProps {
+    request: GentleAgent;
+    children?: JSX.Element;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
+}
 
-    const onClick = () => {
-        window.location.href = `/agent/${id}`;
-    }
+export const DummyCard = ({ request, children, onClick }: DummyCardProps) => {
+    const { id, name, time } = request;
 
     return (
-        <figure
+        <figure onClick={onClick}
             className={cn(
                 "relative mx-auto min-h-fit w-full overflow-hidden rounded-2xl p-4",
                 // animation styles
@@ -23,7 +26,7 @@ export const DummyCard = ({ request, children }: { request: GentleAgent, childre
             )}
         >
 
-            <Link href={`/agent/${id}`} className="cursor-pointer flex flex-row items-center gap-3">
+            <div  className="cursor-pointer flex flex-row items-center gap-3">
                 <div
                     className="flex size-10 items-center justify-center rounded-2xl"
                 >
@@ -40,7 +43,7 @@ export const DummyCard = ({ request, children }: { request: GentleAgent, childre
                     {/* </p> */}
                 </div>
                 
-            </Link>
+            </div>
         </figure>
     );
 };
