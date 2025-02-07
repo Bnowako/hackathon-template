@@ -9,9 +9,11 @@ export default async function Home() {
   return (
     <div>
       <div className="grid grid-cols-1 gap-2 max-w-[50%] mx-auto">
+        
         {dummies.map((dummy: DummyModel) => (
           <DummyCard request={dummy} />
         ))}
       </div>
     </div>
+)
 }

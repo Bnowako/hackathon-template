@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlmodel import Session, SQLModel, create_engine
 
-from back.src.dummy_repository import DummyModel, DummyRepository
+from src.dummy_repository import DummyModel, DummyRepository
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
