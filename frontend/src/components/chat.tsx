@@ -19,23 +19,21 @@ import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 
 
+interface CardsChatProps {
+  messages: Array<{
+    role: "user" | "agent";
+    content: string;
+  }>;
+  onSendMessage: (message: string) => void;
+}
 
-export function CardsChat() {
-  const [messages, setMessages] = React.useState([
-    {
-      role: "agent",
-      content: "Hi, how can I help you today?",
-    },
-  ])
+
+export function CardsChat({ messages, onSendMessage }: CardsChatProps) {
+
   const [input, setInput] = React.useState("")
   const inputLength = input.trim().length
 
-  const userSentMessage = (message: string) => {
-    setMessages([
-      ...messages,
-      { role: "user", content: message },
-    ])
-  }
+  
 
   return (
     <>
@@ -71,11 +69,12 @@ export function CardsChat() {
           </div>
         </CardContent>
         <CardFooter>
-          <form
+        <form
             onSubmit={(event) => {
               event.preventDefault()
               if (inputLength === 0) return
-              userSentMessage(input)
+              onSendMessage(input)
+              setInput("") // Clear input after sending
             }}
             className="flex w-full items-center space-x-2"
           >
