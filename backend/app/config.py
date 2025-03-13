@@ -6,6 +6,8 @@ import motor.motor_asyncio
 from fastapi.middleware.cors import CORSMiddleware
 import logging
 from dotenv import load_dotenv
+from .example.router import router as example_router
+from .example.models import ExampleDocument
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -36,14 +38,17 @@ async def db_lifespan(app: MongoFastAPI):
     else:
         logger.info("Connected to database cluster.")
     
-    await init_beanie(database=app.database, document_models=[])
+    await init_beanie(database=app.database, document_models=[
+        ExampleDocument,
+        ])
     
     yield
     app.mongodb_client.close()
 
 def create_app() -> FastAPI:
     app = MongoFastAPI(lifespan=db_lifespan, openapi_prefix="/api")  # type: ignore
-    
+    app.include_router(example_router)
+
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
