@@ -5,6 +5,14 @@ from fastapi import FastAPI
 import motor.motor_asyncio
 from fastapi.middleware.cors import CORSMiddleware
 import logging
+from dotenv import load_dotenv
+
+if not load_dotenv():
+    raise Exception("Problem loading .env file")
+
+class Config:
+    MONGODB_URL = os.getenv("MONGODB_URL")
+    MONGODB_DATABASE = os.getenv("MONGODB_DATABASE")
 
 
 logging.basicConfig(level=logging.INFO)
@@ -16,8 +24,8 @@ class MongoFastAPI(FastAPI):
 
 async def db_lifespan(app: MongoFastAPI):
     # Startup
-    app.mongodb_client = motor.motor_asyncio.AsyncIOMotorClient(os.environ["MONGODB_URL"])
-    app.database = app.mongodb_client.get_database("10xeasier_d")
+    app.mongodb_client = motor.motor_asyncio.AsyncIOMotorClient(Config.MONGODB_URL)
+    app.database = app.mongodb_client.get_database(Config.MONGODB_DATABASE)
     ping_response = await app.database.command("ping")
     
     if int(ping_response["ok"]) != 1:
