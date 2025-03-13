@@ -7,16 +7,19 @@ from fastapi.middleware.cors import CORSMiddleware
 import logging
 from dotenv import load_dotenv
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 if not load_dotenv():
     raise Exception("Problem loading .env file")
+else:
+    logger.info("Loaded .env file")
 
 class Config:
     MONGODB_URL = os.getenv("MONGODB_URL")
     MONGODB_DATABASE = os.getenv("MONGODB_DATABASE")
 
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 class MongoFastAPI(FastAPI):
     mongodb_client: motor.motor_asyncio.AsyncIOMotorClient[Dict[str, Any]]
@@ -29,7 +32,7 @@ async def db_lifespan(app: MongoFastAPI):
     ping_response = await app.database.command("ping")
     
     if int(ping_response["ok"]) != 1:
-        raise Exception("Problem connecting to database cluster.")
+        raise Exception("Problem connecting to database cluster. For local development run docker run -d -p 27017:27017 mongo")
     else:
         logger.info("Connected to database cluster.")
     
