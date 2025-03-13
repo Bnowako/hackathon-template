@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 from .models import ExampleDocument
 from .schemas import ExampleResponse, PostExampleRequest, PutExampleRequest
 
-router  = APIRouter(prefix="/example", tags=["example"])
+router  = APIRouter(prefix="/examples", tags=["examples"])
 
 @router.get("/")
 async def get_examples() -> List[ExampleResponse]:

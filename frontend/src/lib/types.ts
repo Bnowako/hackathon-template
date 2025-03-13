@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/example/": {
+    "/examples/": {
         parameters: {
             query?: never;
             header?: never;
@@ -12,17 +12,17 @@ export interface paths {
             cookie?: never;
         };
         /** Get Examples */
-        get: operations["get_examples_example__get"];
+        get: operations["get_examples_examples__get"];
         put?: never;
         /** Create Example */
-        post: operations["create_example_example__post"];
+        post: operations["create_example_examples__post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/example/{example_id}": {
+    "/examples/{example_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -30,12 +30,12 @@ export interface paths {
             cookie?: never;
         };
         /** Get Example */
-        get: operations["get_example_example__example_id__get"];
+        get: operations["get_example_examples__example_id__get"];
         /** Update Example */
-        put: operations["update_example_example__example_id__put"];
+        put: operations["update_example_examples__example_id__put"];
         post?: never;
         /** Delete Example */
-        delete: operations["delete_example_example__example_id__delete"];
+        delete: operations["delete_example_examples__example_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -102,7 +102,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    get_examples_example__get: {
+    get_examples_examples__get: {
         parameters: {
             query?: never;
             header?: never;
@@ -122,7 +122,7 @@ export interface operations {
             };
         };
     };
-    create_example_example__post: {
+    create_example_examples__post: {
         parameters: {
             query?: never;
             header?: never;
@@ -155,7 +155,7 @@ export interface operations {
             };
         };
     };
-    get_example_example__example_id__get: {
+    get_example_examples__example_id__get: {
         parameters: {
             query?: never;
             header?: never;
@@ -186,7 +186,7 @@ export interface operations {
             };
         };
     };
-    update_example_example__example_id__put: {
+    update_example_examples__example_id__put: {
         parameters: {
             query?: never;
             header?: never;
@@ -221,7 +221,7 @@ export interface operations {
             };
         };
     };
-    delete_example_example__example_id__delete: {
+    delete_example_examples__example_id__delete: {
         parameters: {
             query?: never;
             header?: never;

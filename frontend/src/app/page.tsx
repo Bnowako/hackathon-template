@@ -2,16 +2,15 @@
 
 import { DataTable } from "@/components/datatable";
 import { DummyForm } from "@/components/dummyform";
-import { listDummies, DummyModel, createDummy, deleteDummy } from "@/lib/api/dummyGateway";
-import { on } from "events";
+import { getExamples, createExample, deleteExample } from "@/lib/api";
 import { useEffect, useState } from "react";
-import { set } from "react-hook-form";
+import { ExampleResponse } from "@/lib/apiTypes";
 
 export default function DemoPage() {
-  const [data, setData] = useState<DummyModel[]>([]);
+  const [data, setData] = useState<ExampleResponse[]>([]);
   const [columns, setColumns] = useState<{ header: string, accessorKey: string }[]>([]);
 
-  function getColumnsFromData(data: DummyModel[]): { header: string; accessorKey: string }[] {
+  function getColumnsFromData(data: ExampleResponse[]): { header: string; accessorKey: string }[] {
     if (!data.length) return [];
     return Object.keys(data[0]).map((key) => ({
       header: key.charAt(0).toUpperCase() + key.slice(1),
@@ -20,25 +19,25 @@ export default function DemoPage() {
   }
   useEffect(() => {
     (async () => {
-      const dummyData = await listDummies();
-      setData(dummyData);
-      console.log(getColumnsFromData(dummyData));
-      setColumns(getColumnsFromData(dummyData));
+      const exampleData = await getExamples();
+      setData(exampleData);
+      console.log('columns',getColumnsFromData(exampleData));
+      setColumns(getColumnsFromData(exampleData));
     })();
   }, []);
 
 
   const onSubmit = async (values: any) => {
-    await createDummy(values.name)
+    await createExample({name: values.name})
     // # update dummies
-    setData(await listDummies())
+    setData(await getExamples())
   }
   const onRowClicked = (data: object) => {
     console.log(data)
   } 
-  const onDeleteClicked = async (data: DummyModel) => {
-    await deleteDummy(data.id as string)
-    setData(await listDummies())
+  const onDeleteClicked = async (data: ExampleResponse) => {
+    await deleteExample(data.id as string)
+    setData(await getExamples())
     console.log(data)
   }
 
@@ -53,7 +52,7 @@ export default function DemoPage() {
       <div>
         {data && columns &&
           <DataTable 
-          onDeleteClicked={(data) => onDeleteClicked(data as DummyModel)}
+          onDeleteClicked={(data) => onDeleteClicked(data as ExampleResponse)}
           onRowClicked={(data) => onRowClicked(data)}
           columns={columns} data={data} />
         }
