@@ -43,7 +43,21 @@ export default function DemoPage() {
 
   return (
     <div className="container mx-auto">
-      <h1>Hello</h1>
+
+      <div className="grid grid-cols-2 my-5">
+        <div></div>
+        <DummyForm onSubmit={onSubmit} />
+      </div>
+
+      <div>
+        {data && columns &&
+          <DataTable 
+          onDeleteClicked={(data) => onDeleteClicked(data as ExampleResponse)}
+          onRowClicked={(data) => onRowClicked(data)}
+          columns={columns} data={data} />
+        }
+      </div>
     </div>
+
   );
 }
