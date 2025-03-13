@@ -38,6 +38,8 @@ docker run -p 27017:27017 -d mongo
 uv run fastapi dev
 ```
 
+*This modular package structure is inspired by https://github.com/zhanymkanov/fastapi-best-practices
+
 ## frontend
 
 ### requirements
