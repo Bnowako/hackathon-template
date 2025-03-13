@@ -1,3 +1,6 @@
+Is it any good?
+yes
+
 # How does it work?
 
 1. For simple use cases we could just serve html from fastAPI
