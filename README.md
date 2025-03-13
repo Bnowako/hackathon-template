@@ -1,3 +1,23 @@
+# How does it work?
+
+1. For simple use cases we could just serve html from fastAPI
+2. For more complex use cases we would use all components
+
+```mermaid
+sequenceDiagram
+    participant Browser
+    participant NextJS as NextJS Middleware
+    participant FastAPI as FastAPI Backend
+
+    Browser->>NextJS: Request
+    NextJS->>FastAPI: Proxy API Request (/api/*)
+    FastAPI-->>NextJS: Response
+    NextJS-->>Browser: API Response
+    NextJS-->>Browser: Rendered Page (for non-API requests)
+
+```
+
+
 # Requirements
 
 ## backend
