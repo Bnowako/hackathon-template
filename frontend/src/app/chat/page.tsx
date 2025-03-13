@@ -1,3 +1,4 @@
+// todo refactor me
 "use client"
 import { CardsChat } from "@/components/chat"
 import { useEffect } from "react";
