@@ -16,6 +16,7 @@ from langgraph.graph.message import add_messages
 from langgraph.graph import START, END
 from langgraph.graph.state import CompiledStateGraph, StateGraph
 from langgraph.prebuilt import ToolNode, tools_condition
+from langgraph.checkpoint.memory import MemorySaver
 
 load_dotenv()
 
@@ -39,7 +40,7 @@ class LLMAgent():
         self,
     ) -> None:
         logger.info("Initializing LLMAgent")
-        # in_memory_store = InMemoryStore()
+        in_memory_store = MemorySaver()
         llm = ChatOpenAI(model="gpt-4o-mini")
         llm_with_tools = llm.bind_tools([what_day_and_time_is_it]) # type: ignore
         tool_node = ToolNode(tools=[what_day_and_time_is_it])
@@ -58,7 +59,7 @@ class LLMAgent():
         graph_builder.add_edge("tools", "chatbot")
         graph_builder.add_edge("chatbot", END)
         
-        self.graph: CompiledStateGraph = graph_builder.compile() # type: ignore
+        self.graph: CompiledStateGraph = graph_builder.compile(checkpointer=in_memory_store) # type: ignore
 
 
     async def astream(self, user_query: str, conversation_id: str) -> AsyncGenerator[BaseMessage, None]:
