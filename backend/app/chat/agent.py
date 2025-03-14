@@ -15,12 +15,12 @@ from dotenv import load_dotenv
 from langgraph.graph.message import add_messages
 from langgraph.graph import START, END
 from langgraph.graph.state import CompiledStateGraph, StateGraph
+from langgraph.prebuilt import ToolNode, tools_condition
 
 load_dotenv()
 
 logger = logging.Logger(__name__)
 
-llm = ChatOpenAI(model="gpt-4o-mini")
 
 class State(TypedDict):
     messages: Annotated[list[BaseMessage], add_messages]
@@ -33,8 +33,6 @@ def what_day_and_time_is_it():
     """Tells the agent what day of the week and time is it"""
     return time.strftime("%A %H:%M:%S", time.localtime())
 
-def chatbot(state: State) -> State:
-    return {"messages": [llm.invoke(state["messages"])]}
 
 class LLMAgent():
     def __init__(
@@ -42,11 +40,24 @@ class LLMAgent():
     ) -> None:
         logger.info("Initializing LLMAgent")
         # in_memory_store = InMemoryStore()
+        llm = ChatOpenAI(model="gpt-4o-mini")
+        llm_with_tools = llm.bind_tools([what_day_and_time_is_it]) # type: ignore
+        tool_node = ToolNode(tools=[what_day_and_time_is_it])
+        def chatbot(state: State) -> State:
+            return {"messages": [llm_with_tools.invoke(state["messages"])]}
         
         graph_builder = StateGraph(State)
         graph_builder.add_node("chatbot", chatbot) # type: ignore
+        graph_builder.add_node('tools', tool_node) # type: ignore
+
+        graph_builder.add_conditional_edges(
+            "chatbot",
+            tools_condition,
+        )
         graph_builder.add_edge(START, "chatbot")
+        graph_builder.add_edge("tools", "chatbot")
         graph_builder.add_edge("chatbot", END)
+        
         self.graph: CompiledStateGraph = graph_builder.compile() # type: ignore
 
 

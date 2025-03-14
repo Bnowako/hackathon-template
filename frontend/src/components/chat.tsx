@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import { BaseMessage } from "@/lib/apiTypes"
+import { ChatMessage } from "@/components/ChatMessage"
 
 
 interface CardsChatProps {
@@ -51,18 +52,8 @@ export function CardsChat({ messages, onSendMessage }: CardsChatProps) {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={cn(
-                  "flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
-                  message.type === "human"
-                    ? "ml-auto bg-primary text-primary-foreground"
-                    : "bg-muted"
-                )}
-              >
-                {message.content}
-              </div>
+            {messages.map((message: BaseMessage, index: number) => (
+              <ChatMessage key={index} message={message} />
             ))}
           </div>
         </CardContent>
