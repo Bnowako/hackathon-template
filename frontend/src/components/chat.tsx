@@ -16,7 +16,6 @@ import {
     CardHeader,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { cn } from "@/lib/utils"
 import { BaseMessage } from "@/lib/apiTypes"
 import { ChatMessage } from "@/components/ChatMessage"
 

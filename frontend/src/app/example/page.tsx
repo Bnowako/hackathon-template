@@ -4,7 +4,7 @@ import { DataTable } from "@/components/datatable";
 import { DummyForm } from "@/components/dummyform";
 import { getExamples, createExample, deleteExample } from "@/lib/api";
 import { useEffect, useState } from "react";
-import { ExampleResponse } from "@/lib/apiTypes";
+import { ExampleResponse, PostExampleRequest } from "@/lib/apiTypes";
 
 export default function DemoPage() {
   const [data, setData] = useState<ExampleResponse[]>([]);
@@ -27,7 +27,7 @@ export default function DemoPage() {
   }, []);
 
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: PostExampleRequest) => {
     await createExample({name: values.name})
     // # update dummies
     setData(await getExamples())

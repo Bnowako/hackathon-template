@@ -47,7 +47,7 @@ export default function ChatPage() {
                 socket.close();
             }
         };
-    }, []);
+    }, [socket]);
 
     const userSentMessage = (message: string) => {
         socket?.send(JSON.stringify({

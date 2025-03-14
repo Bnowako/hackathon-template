@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint --fix",
     "generate:types": "npx openapi-typescript http://localhost:8000/openapi.json --output src/lib/types.ts"
   },
   "dependencies": {

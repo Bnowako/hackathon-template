@@ -3,11 +3,12 @@ import createClient from "openapi-fetch";
 import { paths } from "./types";
 import { ExampleResponse, PostExampleRequest, PutExampleRequest } from "./apiTypes";
 
-
 const client = createClient<paths>({baseUrl: '/api'});
 
-export const handleApiError = (error: any) => {
-    const message = error?.detail || 'An unexpected error occurred';
+
+export const handleApiError = (error: unknown) => {  
+    // @ts-expect-error hack to handle error
+    const message = error?.message || 'An unexpected error occurred'; 
     toast.error(message);
     throw error;
 };
