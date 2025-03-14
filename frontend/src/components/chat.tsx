@@ -17,13 +17,11 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
+import { BaseMessage } from "@/lib/apiTypes"
 
 
 interface CardsChatProps {
-  messages: Array<{
-    role: "user" | "agent";
-    content: string;
-  }>;
+  messages: Array<BaseMessage>;
   onSendMessage: (message: string) => void;
 }
 
@@ -58,7 +56,7 @@ export function CardsChat({ messages, onSendMessage }: CardsChatProps) {
                 key={index}
                 className={cn(
                   "flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
-                  message.role === "user"
+                  message.type === "human"
                     ? "ml-auto bg-primary text-primary-foreground"
                     : "bg-muted"
                 )}

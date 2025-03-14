@@ -3,10 +3,10 @@
 import json
 from fastapi import APIRouter, WebSocket
 import logging
+import uuid
 
-from langchain_openai import ChatOpenAI
 from .agent import LLMAgent
-from .schemas import Message
+from .schemas import PostUserMessage
 
 router = APIRouter()
 
@@ -17,15 +17,18 @@ logger.setLevel(logging.INFO)
 @router.websocket("/chat")
 async def chat(websocket: WebSocket):
     await websocket.accept()
+    conversation_id = str(uuid.uuid4())
     logger.info("WebSocket connection accepted")
-    llm = ChatOpenAI(model="gpt-4o-mini")
-    agent = LLMAgent(llm)
+    
+    agent = LLMAgent()
     logger.info("Agent initialized")
     while True:
         data = await websocket.receive_text()
         logger.info(f"Received message: {data}")
-        message = Message(**json.loads(data))
-        response = await agent.ask(message.message, message.conversation_id)
-        await websocket.send_text(Message(role="assistant", message=response, conversation_id=message.conversation_id).model_dump_json())
-        logger.info(f"Sent message: {response}")
+        
+        message = PostUserMessage(**json.loads(data))
+        
+        for response in agent.stream(message.content, conversation_id):
+            logger.info(f"WS sent: {response.model_dump_json()}")
+            await websocket.send_text(response.model_dump_json())
 
