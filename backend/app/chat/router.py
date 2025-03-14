@@ -28,7 +28,7 @@ async def chat(websocket: WebSocket):
         
         message = PostUserMessage(**json.loads(data))
         
-        for response in agent.stream(message.content, conversation_id):
+        async for response in agent.astream(message.content, conversation_id):
             logger.info(f"WS sent: {response.model_dump_json()}")
             await websocket.send_text(response.model_dump_json())
 

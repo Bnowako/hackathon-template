@@ -50,12 +50,12 @@ class LLMAgent():
         self.graph: CompiledStateGraph = graph_builder.compile() # type: ignore
 
 
-    def stream(self, user_query: str, conversation_id: str) -> Generator[BaseMessage, None, None]:
+    async def astream(self, user_query: str, conversation_id: str) -> AsyncGenerator[BaseMessage, None]:
         # Generator[YieldType, SendType, ReturnType]
         # YieldType: The type of values that will be yielded (str in this case - the chat messages)
         # SendType: The type that can be sent to the generator via .send() (None since we don't use .send())
         # ReturnType: The type that is returned when generator is done (None since we don't return anything)
-        for event in self.graph.stream( # type: ignore
+        async for event in self.graph.astream( # type: ignore
             input={"messages": [HumanMessage(content=user_query)]},
             config={"configurable": {"thread_id": conversation_id}},
             stream_mode="values",
