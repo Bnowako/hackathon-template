@@ -1,5 +1,3 @@
-# todo refactor me
-
 import json
 from fastapi import APIRouter, WebSocket
 import logging

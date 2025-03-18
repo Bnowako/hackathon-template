@@ -1,16 +1,10 @@
-"""
-Langchain agent
-"""
 import logging
 
 import time
-from typing import Annotated, Any, AsyncGenerator, Callable, Generator, Protocol, TypedDict
-from langchain.chat_models.base import BaseChatModel
+from typing import Annotated, AsyncGenerator, TypedDict
 from langchain_core.messages import BaseMessage, HumanMessage
 from langchain_core.tools import tool # type: ignore
 from langchain_openai import ChatOpenAI
-from langgraph.store.memory import InMemoryStore
-from langgraph.prebuilt import create_react_agent # type: ignore
 from dotenv import load_dotenv
 from langgraph.graph.message import add_messages
 from langgraph.graph import START, END
@@ -27,8 +21,6 @@ class State(TypedDict):
     messages: Annotated[list[BaseMessage], add_messages]
 
 
-# This is a hack to make the react agent work with openai api.
-# Agents are not working without tools, so we need to add a dummy tool
 @tool
 def what_day_and_time_is_it():
     """Tells the agent what day of the week and time is it"""
